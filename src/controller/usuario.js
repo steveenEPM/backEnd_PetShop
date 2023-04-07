@@ -11,7 +11,7 @@ const register = async (req, res) => {
     try {
         const { usuario, password, correo, sexo, fecha } = req.body
 
-        const exist = await Usuario.find({ $or: [{ usuario }, { correo }] })
+        const exist = await Usuario.findOne({usuario})
 
         if (exist)
             return res.status(500).json("usuario y/o correo existente")
@@ -58,25 +58,28 @@ const logIn = async (req, res) => {
 
 /**Usuario va comprar un producto */
 const setComprar = async (req, res) => {
-    const { _id, cantidad, producto, precio, estado, idProducto } = req.body
+    const {  cantidad, producto, precio, estado, idProducto } = req.body
+
+    const {key} = req.headers
+
+    const token = getToken(key)
 
     try {
-        const result = await Usuario.updateOne({ _id }, { $push: { compra: { producto, cantidad, precio, estado, idProducto } } })
+        const result = await Usuario.updateOne({ _id:token }, { $push: { compra: { producto, cantidad, precio, estado, idProducto } } })
             .then(async e => {
-                let auxUser = await Usuario.findOne({ _id })
+                let auxUser = await Usuario.findOne({ _id:token })
 
                 let idCompra = auxUser.compra[auxUser.compra.length - 1]
 
                 const auxRes = await Ventas.create({
                     idProducto,
                     idVenta: idCompra._id,
-                    idUsuairo: _id,
+                    idUsuairo: token,
                     producto,
                     usuario: auxUser.usuario,
                     precio,
                     cantidad
                 })
-                console.log(e)
                 return e
             }).catch(err => "error de compra")
 
@@ -96,8 +99,10 @@ const getCompra = async (req, res) => {
 
 
     try {
-        const { _id } = req.body
-        const result = await Usuario.findOne({ _id })
+        const {key} = req.headers
+
+        const token = getToken(key)
+        const result = await Usuario.findOne({ _id :token})
 
         return res.status(200).json({ compras: result.compra })
 

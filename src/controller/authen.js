@@ -15,7 +15,7 @@ const Authen = async (req, res , next) => {
         const result = await Usuario.findOne({ _id: token })
 
         if (!result) throw ''
-        console.log(token)
+
 
         return next()
 
