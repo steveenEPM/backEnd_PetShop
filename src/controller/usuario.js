@@ -47,7 +47,7 @@ const logIn = async (req, res) => {
 
         let tocken = setToken(result._id)
 
-        return res.status(200).json(tocken)
+        return res.status(200).json({token:tocken,usuario:result.usuario})
 
     } catch (error) {
         console.log(error)
