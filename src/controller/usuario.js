@@ -23,7 +23,9 @@ const register = async (req, res) => {
             usuario, contrasena, correo, sexo, fecha
         })
 
-        return res.status(200).json(result)
+        const token = setToken(result._id)
+
+        return res.status(200).json({token:token,usuario:result.usuario})
     } catch (error) {
         console.log(error)
         return res.status(500).json("error de validacion")
