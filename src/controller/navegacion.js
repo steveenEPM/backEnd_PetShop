@@ -8,7 +8,7 @@ const listItems = async (req, res) => {
 
     try {
         const result = await Producto.find().limit(10).sort({ amount: -1 })
-
+        console.log("ind")
         return res.status(200).json(result)
 
     } catch (error) {

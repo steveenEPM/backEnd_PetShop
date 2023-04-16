@@ -6,8 +6,8 @@ const TipoProducto = require('./models/tipoProd')
 
 const Producto = require('./models/producto')
 
-const { data } = require('./utils/databas')
-const {genRandonString} = require('./utils/functions')
+const  DataBase  = require('./utils/databas')
+const { genRandonString } = require('./utils/functions')
 
 async function animal1(nombre) {
     await Animal.create({ nombre })
@@ -39,8 +39,8 @@ async function productos1(nombre, descripcion, animal, tipoPr, cantidad, precio,
             url
         }).then(e => console.log(e))
             .catch(err => console.log(err))
-    }else{
-        console.log("no encontrado: =>",restAnim,"=>",restTip)
+    } else {
+        console.log("no encontrado: =>", restAnim, "=>", restTip)
     }
 }
 
@@ -48,14 +48,8 @@ async function productos1(nombre, descripcion, animal, tipoPr, cantidad, precio,
 
 
 
-data.forEach(e => {
-
-    for (let index = 0; index < 10; index++) {
-        let producto =  genRandonString(15) + e.nombre
-        let descripcion =  genRandonString(15) + e.descripcion
-        productos1(producto, descripcion, e.animal, e.tipo, e.cantidad, e.percio, e.imagen)
-
-    }
+DataBase.forEach(e => {
+    productos1(e.nombre,e.descripcion,e.animal,e.tipo,e.cantidad,e.percio,e.imagen)
 })
 
 

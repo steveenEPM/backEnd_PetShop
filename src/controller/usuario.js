@@ -14,7 +14,7 @@ const register = async (req, res) => {
         const exist = await Usuario.findOne({usuario})
 
         if (exist)
-            return res.status(500).json("usuario y/o correo existente")
+            return res.status(400).json("usuario y/o correo existente")
 
         const contrasena = bcrypt.hashSync(password, 8)
 
@@ -41,11 +41,11 @@ const logIn = async (req, res) => {
 
 
         if (!result)
-            return res.status(500).json("usuario y/o contraseña incorrectos")
+            return res.status(400).json("usuario y/o contraseña incorrectos")
 
         let validat = bcrypt.compareSync(password, result.contrasena)
         if (!validat)
-            return res.status(500).json("usuario y/o contraseña incorrectos")
+            return res.status(400).json("usuario y/o contraseña incorrectos")
 
         let tocken = setToken(result._id)
 
